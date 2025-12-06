@@ -1,0 +1,1 @@
+. "/Users/mac/development/projects/opensource/safe-dist/test_package/build/apple-clang-17-x86_64-gnu17-release/generators/deactivate_conanbuildenv-release-x86_64.sh"

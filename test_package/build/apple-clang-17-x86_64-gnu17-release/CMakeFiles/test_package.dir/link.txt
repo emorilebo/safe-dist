@@ -1,0 +1,1 @@
+/usr/bin/c++ -m64 -stdlib=libc++ -O3 -DNDEBUG -arch x86_64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.4.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names -m64 CMakeFiles/test_package.dir/src/example.cpp.o -o test_package
