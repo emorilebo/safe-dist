@@ -1,0 +1,22 @@
+# safe-dist Configuration File
+# Place this file as .safe-dist.yaml in your project root
+
+# Patterns to detect as debris (files that shouldn't be in distributions)
+debris_patterns:
+  - ".DS_Store"
+  - "Thumbs.db"
+  - "*.bak"
+  - "*.tmp"
+  - "*.swp"
+  - "*~"
+  - "*.orig"
+
+# Patterns to exclude from scanning
+exclude_patterns:
+  - ".git/*"
+  - "node_modules/*"
+  - "__pycache__/*"
+  - "*.md"
+
+# Enable strict mode (check for world-writable permissions)
+strict: false

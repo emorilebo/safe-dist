@@ -5,8 +5,11 @@ class SafeDistPackage(ConanFile):
     name = "safe-dist"
     version = "0.1.0"
     description = "A simple C++ directory integrity checker for CI/CD pipelines."
-    author = "Godfrey Lebo <godfrey@example.com>"
-    topics = ("security", "cli", "integrity", "deployment")
+    author = "Godfrey Lebo <emorylebo@gmail.com>"
+    license = "MIT"
+    url = "https://github.com/emorilebo/safe-dist"
+    homepage = "https://github.com/emorilebo/safe-dist"
+    topics = ("security", "cli", "integrity", "deployment", "ci-cd")
 
     # Binary configuration
     settings = "os", "compiler", "build_type", "arch"
