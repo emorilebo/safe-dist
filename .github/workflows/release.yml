@@ -41,17 +41,19 @@ jobs:
         shell: bash
         run: |
           name="safe-dist-${GITHUB_REF_NAME}-${{ matrix.target }}"
-          mkdir -p "$name"
-          cp stage/bin/* LICENSE README.md "$name/"
+          mkdir -p "package/$name" out
+          cp stage/bin/* LICENSE README.md "package/$name/"
           if [ "${{ runner.os }}" = "Windows" ]; then
-            7z a "$name.zip" "$name" > /dev/null
+            (cd package && 7z a "../out/$name.zip" "$name" > /dev/null)
           else
-            tar -czf "$name.tar.gz" "$name"
+            tar -C package -czf "out/$name.tar.gz" "$name"
           fi
+          ls -l out
       - uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.target }}
-          path: safe-dist-*.*
+          path: out/*
+          if-no-files-found: error
 
   release:
     name: Publish GitHub release
@@ -67,7 +69,8 @@ jobs:
       - name: Checksums
         run: |
           cd dist
-          sha256sum safe-dist-* > SHA256SUMS.txt
+          ls -l
+          find . -maxdepth 1 -type f \( -name '*.tar.gz' -o -name '*.zip' \) -printf '%f\n' | sort | xargs sha256sum > SHA256SUMS.txt
           cat SHA256SUMS.txt
       - uses: softprops/action-gh-release@v2
         with:

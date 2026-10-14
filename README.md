@@ -56,7 +56,7 @@ private keys, and the `.DS_Store` goes in the bin.
 ```yaml
 - uses: actions/checkout@v4
 - run: npm ci && npm run build   # your build
-- uses: emorilebo/safe-dist@v0.2.0
+- uses: emorilebo/safe-dist@v0.2.1
   with:
     path: dist
     strict: true
@@ -74,8 +74,8 @@ Every [release](https://github.com/emorilebo/safe-dist/releases) ships binaries 
 (x86_64 and arm64, statically linked), macOS (universal) and Windows (x86_64), plus `SHA256SUMS.txt`.
 
 ```bash
-curl -sSL https://github.com/emorilebo/safe-dist/releases/download/v0.2.0/safe-dist-v0.2.0-linux-x86_64.tar.gz | tar xz
-./safe-dist-v0.2.0-linux-x86_64/safe-dist --version
+curl -sSL https://github.com/emorilebo/safe-dist/releases/download/v0.2.1/safe-dist-v0.2.1-linux-x86_64.tar.gz | tar xz
+./safe-dist-v0.2.1-linux-x86_64/safe-dist --version
 ```
 
 ### Build from source
@@ -103,7 +103,7 @@ conan create . --build=missing
 Then consume it as a tool requirement anywhere on that machine:
 
 ```bash
-conan install --tool-requires=safe-dist/0.2.0 --build=missing
+conan install --tool-requires=safe-dist/0.2.1 --build=missing
 source conanbuild.sh        # puts safe-dist on PATH (conanbuild.bat on Windows)
 safe-dist --strict ./dist
 ```
@@ -173,7 +173,7 @@ Command-line flags win: `--strict` turns strict mode on even if the file says `f
 ```json
 {
   "tool": "safe-dist",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "passed": false,
   "files_scanned": 6,
   "directories_scanned": 1,
@@ -201,8 +201,8 @@ Command-line flags win: `--strict` turns strict mode on even if the file says `f
 release-hygiene:
   stage: test
   script:
-    - curl -sSL https://github.com/emorilebo/safe-dist/releases/download/v0.2.0/safe-dist-v0.2.0-linux-x86_64.tar.gz | tar xz
-    - ./safe-dist-v0.2.0-linux-x86_64/safe-dist --strict dist
+    - curl -sSL https://github.com/emorilebo/safe-dist/releases/download/v0.2.1/safe-dist-v0.2.1-linux-x86_64.tar.gz | tar xz
+    - ./safe-dist-v0.2.1-linux-x86_64/safe-dist --strict dist
 ```
 
 **Any shell**: safe-dist is a single binary with exit codes, so `safe-dist dist || exit 1` works in
@@ -250,7 +250,7 @@ final artifact folder, which is the thing your users actually receive.
 
 ### Can I use safe-dist with Conan?
 Yes. The repository contains a Conan 2 recipe (`conan create .`), and the package is consumed as a tool
-requirement (`conan install --tool-requires=safe-dist/0.2.0`). A ConanCenter listing is in review.
+requirement (`conan install --tool-requires=safe-dist/0.2.1`). A ConanCenter listing is in review.
 
 ### Why does `--strict` skip the permission check on Windows?
 Windows has no POSIX "others" permission bit; the C++ standard library reports every writable file as

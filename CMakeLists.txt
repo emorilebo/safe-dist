@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.15)
 project(safe-dist
-    VERSION 0.2.0
+    VERSION 0.2.1
     DESCRIPTION "Catch debris and secrets in build output before you ship it"
     HOMEPAGE_URL "https://github.com/emorilebo/safe-dist"
     LANGUAGES CXX)

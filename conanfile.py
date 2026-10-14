@@ -8,7 +8,7 @@ from conan.tools.files import copy
 
 class SafeDistConan(ConanFile):
     name = "safe-dist"
-    version = "0.2.0"
+    version = "0.2.1"
     description = "Catch debris and secrets (.DS_Store, *.bak, .env, private keys) in build output before you ship it."
     license = "MIT"
     author = "Godfrey Lebo <emorylebo@gmail.com>"
