@@ -1,0 +1,69 @@
+name: "safe-dist release hygiene check"
+description: "Fail the build when debris or secrets (.DS_Store, *.bak, .env, private keys) end up in your release artifacts."
+author: "Godfrey Lebo"
+branding:
+  icon: "shield"
+  color: "green"
+
+inputs:
+  path:
+    description: "Directory to scan, e.g. dist or build/output."
+    required: false
+    default: "."
+  strict:
+    description: "Also flag world-writable entries and symlinks that point outside the directory (true/false)."
+    required: false
+    default: "false"
+  exclude:
+    description: "Newline-separated patterns to skip (e.g. node_modules)."
+    required: false
+    default: ""
+  config:
+    description: "Path to a safe-dist config file. Defaults to ./.safe-dist.yaml when it exists."
+    required: false
+    default: ""
+  json-report:
+    description: "Optional file path to also write the JSON report to."
+    required: false
+    default: ""
+
+runs:
+  using: "composite"
+  steps:
+    - name: Build safe-dist
+      shell: bash
+      run: |
+        cmake -S "$GITHUB_ACTION_PATH" -B "$RUNNER_TEMP/safe-dist-build" -DCMAKE_BUILD_TYPE=Release > /dev/null
+        cmake --build "$RUNNER_TEMP/safe-dist-build" --config Release > /dev/null
+        cmake --install "$RUNNER_TEMP/safe-dist-build" --config Release --prefix "$RUNNER_TEMP/safe-dist" > /dev/null
+        "$RUNNER_TEMP/safe-dist/bin/safe-dist" --version
+
+    - name: Scan
+      shell: bash
+      env:
+        INPUT_PATH: ${{ inputs.path }}
+        INPUT_STRICT: ${{ inputs.strict }}
+        INPUT_EXCLUDE: ${{ inputs.exclude }}
+        INPUT_CONFIG: ${{ inputs.config }}
+        INPUT_JSON_REPORT: ${{ inputs.json-report }}
+      run: |
+        safe_dist="$RUNNER_TEMP/safe-dist/bin/safe-dist"
+        args=()
+        if [ "$INPUT_STRICT" = "true" ]; then args+=(--strict); fi
+        if [ -n "$INPUT_CONFIG" ]; then args+=(--config "$INPUT_CONFIG"); fi
+        while IFS= read -r pattern; do
+          pattern="${pattern%$'\r'}"
+          if [ -n "$pattern" ]; then args+=(--exclude "$pattern"); fi
+        done <<< "$INPUT_EXCLUDE"
+
+        if [ -n "$INPUT_JSON_REPORT" ]; then
+          "$safe_dist" --json "${args[@]}" "$INPUT_PATH" > "$INPUT_JSON_REPORT" || true
+        fi
+
+        set +e
+        "$safe_dist" "${args[@]}" "$INPUT_PATH" > "$RUNNER_TEMP/safe-dist.log" 2>&1
+        status=$?
+        set -e
+        cat "$RUNNER_TEMP/safe-dist.log"
+        grep -F '[FAIL]' "$RUNNER_TEMP/safe-dist.log" | sed 's/^ *\[FAIL\] /::error title=safe-dist::/' || true
+        exit "$status"

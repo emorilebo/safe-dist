@@ -1,3 +1,0 @@
-/Users/mac/development/projects/opensource/safe-dist/test_package/build/apple-clang-17-x86_64-gnu17-release/CMakeFiles/test_package.dir
-/Users/mac/development/projects/opensource/safe-dist/test_package/build/apple-clang-17-x86_64-gnu17-release/CMakeFiles/edit_cache.dir
-/Users/mac/development/projects/opensource/safe-dist/test_package/build/apple-clang-17-x86_64-gnu17-release/CMakeFiles/rebuild_cache.dir

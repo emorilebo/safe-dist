@@ -1,22 +1,43 @@
-# safe-dist Configuration File
-# Place this file as .safe-dist.yaml in your project root
+# safe-dist configuration.
+# Save as .safe-dist.yaml in the directory you run safe-dist from and it is picked up
+# automatically (or pass --config FILE; --no-config disables discovery).
+#
+# Pattern rules:
+#   - no '/'   -> matches a file or directory name at any depth   (node_modules, *.bak)
+#   - with '/' -> matches the path relative to the scanned dir     (assets/*.map, **/.aws/credentials)
+#   - '*' stops at '/', '**' does not, '?' matches one character
+#   - excluding a directory skips everything inside it
 
-# Patterns to detect as debris (files that shouldn't be in distributions)
+# Fail on world-writable entries and on symlinks that point outside the scanned directory.
+strict: false
+
+# Junk that should never ship. Listing this key REPLACES the built-in list.
 debris_patterns:
   - ".DS_Store"
+  - "._*"
+  - "__MACOSX"
   - "Thumbs.db"
+  - "desktop.ini"
   - "*.bak"
   - "*.tmp"
   - "*.swp"
   - "*~"
   - "*.orig"
 
-# Patterns to exclude from scanning
-exclude_patterns:
-  - ".git/*"
-  - "node_modules/*"
-  - "__pycache__/*"
-  - "*.md"
+# Files that leak credentials. Listing this key REPLACES the built-in list.
+sensitive_patterns:
+  - ".env"
+  - ".env.local"
+  - ".env.*.local"
+  - ".env.production"
+  - ".netrc"
+  - "id_rsa"
+  - "id_ed25519"
+  - "*.p12"
+  - "*.pfx"
+  - "*.jks"
 
-# Enable strict mode (check for world-writable permissions)
-strict: false
+# Skipped entirely. Appended to any --exclude flags.
+exclude_patterns:
+  - "node_modules"
+  - "*.md"
